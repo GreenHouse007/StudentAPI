@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student API - Mini UI</title>
+    <style>
+      body {
+        font-family: system-ui, Segoe UI, Roboto, Arial;
+        margin: 20px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      th {
+        background: #f4f4f4;
+      }
+      input,
+      button {
+        padding: 6px;
+        margin: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Student API - Mini UI</h1>
+    <section>
+      <h2>Create Student</h2>
+      <input id="firstName" placeholder="First name" />
+      <input id="lastName" placeholder="Last name" />
+      <input id="email" placeholder="Email" />
+      <input id="age" placeholder="Age" type="number" />
+      <input id="currentCollege" placeholder="College" />
+      <button id="createBtn">Create</button>
+    </section>
+
+    <section>
+      <h2>Students</h2>
+      <button id="refreshBtn">Refresh</button>
+      <table id="studentsTbl">
+        <thead>
+          <tr>
+            <th>First</th>
+            <th>Last</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>College</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <template id="rowTpl">
+      <tr>
+        <td class="first"></td>
+        <td class="last"></td>
+        <td class="email"></td>
+        <td class="age"></td>
+        <td class="college"></td>
+        <td>
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

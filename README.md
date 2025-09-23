@@ -1,12 +1,9 @@
-This is a project for school that uses MangoDB. PART 2
+This is a project for school that uses MangoDB. PART 3
 
 RENDER.COM link = https://studentapi-cedw.onrender.com
 
-Currently 3 routes:
-/
-/ttech
-/students - calls all students form DB
+UI on root to Create, Read, Update, Delete.
 
-Connects to database and console logs "MongoDB connected successfully"
+Project file also has routes.rest with same crud operations.
 
-routes.rest file working to send requests.
+Successfully interacts with DB.
