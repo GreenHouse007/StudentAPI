@@ -102,4 +102,38 @@ const generateToken = (user) => {
   );
 };
 
-module.exports = { home, register, login, logout, protected, generateToken };
+const listUsers = async (req, res) => {
+  // accept token via Authorization: Bearer <token>
+  const header = req.headers.authorization || "";
+  const token = header.startsWith("Bearer ") ? header.split(" ")[1] : null;
+  if (!token) return res.status(401).json({ message: "No token provided" });
+
+  try {
+    jwt.verify(token, SECRET_KEY);
+  } catch (e) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+
+  try {
+    const db = mongodb.getDb().db();
+    const users = await db
+      .collection("users")
+      .find({}, { projection: { password: 0 } }) // hide hashed passwords
+      .sort({ createdAt: -1 })
+      .toArray();
+    return res.json({ users });
+  } catch (e) {
+    console.error("Error listing users:", e);
+    return res.status(500).json({ message: "Error fetching users" });
+  }
+};
+
+module.exports = {
+  home,
+  register,
+  login,
+  logout,
+  protected,
+  generateToken,
+  listUsers,
+};

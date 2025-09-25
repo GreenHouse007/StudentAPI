@@ -1,78 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Student API - Mini UI</title>
-    <style>
-      body {
-        font-family: system-ui, Segoe UI, Roboto, Arial;
-        margin: 20px;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-top: 10px;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-      }
-      th {
-        background: #f4f4f4;
-      }
-      input,
-      button {
-        padding: 6px;
-        margin: 4px;
-      }
-    </style>
+    <title>Login & Register</title>
   </head>
   <body>
-    <h1>Student API - Mini UI</h1>
-    <section>
-      <h2>Create Student</h2>
-      <input id="firstName" placeholder="First name" />
-      <input id="lastName" placeholder="Last name" />
-      <input id="email" placeholder="Email" />
-      <input id="age" placeholder="Age" type="number" />
-      <input id="currentCollege" placeholder="College" />
-      <button id="createBtn">Create</button>
-    </section>
+    <h1>Sign in</h1>
+    <form id="loginForm">
+      <input name="email" type="email" placeholder="email" required />
+      <input name="password" type="password" placeholder="password" required />
+      <button type="submit">Sign in</button>
+    </form>
 
-    <section>
-      <h2>Students</h2>
-      <button id="refreshBtn">Refresh</button>
-      <table id="studentsTbl">
-        <thead>
-          <tr>
-            <th>First</th>
-            <th>Last</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>College</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
+    <hr />
 
-    <template id="rowTpl">
-      <tr>
-        <td class="first"></td>
-        <td class="last"></td>
-        <td class="email"></td>
-        <td class="age"></td>
-        <td class="college"></td>
-        <td>
-          <button class="edit">Edit</button>
-          <button class="delete">Delete</button>
-        </td>
-      </tr>
-    </template>
+    <h2>Register new user</h2>
+    <form id="registerForm">
+      <input name="fullName" placeholder="Full Name" required />
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <select name="userType" required>
+        <option value="">-- Select user type --</option>
+        <option value="admin">Admin</option>
+        <option value="member">Member</option>
+        <option value="guest">Guest</option>
+      </select>
+      <button type="submit">Register</button>
+    </form>
 
-    <script src="/app.js"></script>
+    <script>
+      // LOGIN
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const body = {
+            email: form.email.value,
+            password: form.password.value,
+          };
+          try {
+            const r = await fetch("/auth/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            if (r.ok) {
+              const j = await r.json();
+              alert("Login successful!");
+              // e.g. store token or redirect
+              localStorage.setItem("token", j.token);
+              location.href = "/data.html";
+            } else {
+              const err = await r.json();
+              alert("Login failed: " + (err.message || "Unknown error"));
+            }
+          } catch (err) {
+            alert("Network error: " + err.message);
+          }
+        });
+
+      // REGISTER
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const body = {
+            fullName: form.fullName.value,
+            email: form.email.value,
+            password: form.password.value,
+            userType: form.userType.value,
+          };
+          try {
+            const r = await fetch("/auth/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            if (r.ok) {
+              const j = await r.json();
+              alert("Registered successfully!");
+              // e.g. store token or auto-login
+              // localStorage.setItem("token", j.token);
+              //location.href = "/app";
+            } else {
+              const err = await r.json();
+              alert("Registration failed: " + (err.message || "Unknown error"));
+            }
+          } catch (err) {
+            alert("Network error: " + err.message);
+          }
+        });
+    </script>
   </body>
 </html>
